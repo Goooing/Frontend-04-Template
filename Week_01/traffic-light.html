@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .container {
+      width: 50px;
+      height: 150px;
+      border-radius: 25px;
+      border: 1px solid #000;
+      text-align: center;
+    }
+    .container div {
+      width: 30px;
+      height: 30px;
+      margin: 10px;
+      border-radius: 15px;
+      background-color: #ccc;
+    }
+    .red.active {
+      background-color: #f00;
+    }
+    .yellow.active {
+      background-color: #ff0;
+    }
+    .green.active {
+      background-color: green;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="red"></div>
+    <div class="yellow"></div>
+    <div class="green"></div>
+  </div>
+  <script>
+    let showLight = 0
+    let redLight = document.querySelector('.red')
+    let yellowLight = document.querySelector('.yellow')
+    let greenLight = document.querySelector('.green')
+    function show() {
+      if (showLight === 0) {
+        redLight.classList.add('active')
+        yellowLight.classList.remove('active')
+        greenLight.classList.remove('active')
+        setTimeout(() => {
+          showLight++
+          show()
+        }, 5000)
+      }
+      if (showLight === 1) {
+        redLight.classList.remove('active')
+        yellowLight.classList.add('active')
+        greenLight.classList.remove('active')
+        setTimeout(() => {
+          showLight++
+          show()
+        }, 2000)
+      }
+      if (showLight === 2) {
+        redLight.classList.remove('active')
+        yellowLight.classList.remove('active')
+        greenLight.classList.add('active')
+        setTimeout(() => {
+          showLight = 0
+          show()
+        }, 10000)
+      }
+    }
+
+    show()
+  </script>
+</body>
+</html>

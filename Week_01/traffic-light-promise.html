@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .container {
+      width: 50px;
+      height: 150px;
+      border-radius: 25px;
+      border: 1px solid #000;
+      text-align: center;
+    }
+    .container div {
+      width: 30px;
+      height: 30px;
+      margin: 10px;
+      border-radius: 15px;
+      background-color: #ccc;
+    }
+    .red.active {
+      background-color: #f00;
+    }
+    .yellow.active {
+      background-color: #ff0;
+    }
+    .green.active {
+      background-color: green;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="red"></div>
+    <div class="yellow"></div>
+    <div class="green"></div>
+  </div>
+  <script>
+    let redLight = document.querySelector('.red')
+    let yellowLight = document.querySelector('.yellow')
+    let greenLight = document.querySelector('.green')
+    let allLight = document.querySelector('.container').getElementsByTagName('div')
+    
+    function red() {
+      for (let i = 0; i < allLight.length; i++) {
+        allLight[i].classList.remove('active')
+      }
+      redLight.classList.add('active')
+    }
+    function yellow() {
+      for (let i = 0; i < allLight.length; i++) {
+        allLight[i].classList.remove('active')
+      }
+      yellowLight.classList.add('active')
+    }
+    function green() {
+      for (let i = 0; i < allLight.length; i++) {
+        allLight[i].classList.remove('active')
+      }
+      greenLight.classList.add('active')
+    }
+    
+    function sleep(t) {
+      return new Promise((resolve, reject) => {
+        setTimeout(resolve, t)
+      })
+    }
+
+    function show() {
+      red()
+      sleep(1000).then(function() {
+        yellow()
+        return sleep(200)
+      }).then(function() {
+          green()
+          return sleep(500)
+      }).then(show)
+    }
+    show()
+  </script>
+</body>
+</html>
