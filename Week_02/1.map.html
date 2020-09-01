@@ -50,13 +50,15 @@
           break
       }
     })
-    container.addEventListener('contextmenu', (event) => {
-      event.preventDefault();
-    })
     container.addEventListener('mouseup', (event) => {
       isMouseDown = false
       isClear = false
     })
+    // 防止弹出右键菜单
+    container.addEventListener('contextmenu', (event) => {
+      event.preventDefault();
+    })
+
     for (let i = 0; i < 100; i++) {
       for (let j = 0; j < 100; j++) {
         let cell = document.createElement('div');
@@ -65,7 +67,7 @@
           cell.classList.add('black')
         } 
         cell.addEventListener('mousemove', () => {
-          console.log("mouseMove")
+          // console.log("mouseMove")
           if (isMouseDown) {
             // console.log("mouseDonw&Move")
             cell.classList.add('black')
@@ -77,6 +79,36 @@
         })
         container.append(cell)
       }
+    }
+
+    function path(map, start, end) {
+      var queue = [start]
+      console.dir(queue)
+      function insert(x, y) {
+        if (x < 0 || x >= 100 || y < 0 || y >= 100) {
+          console.log(x)
+          return
+        }
+        if (map[y * 100 + x]) {
+          return
+        }
+        map[y * 100 + x] = 2
+        queue.push([x, y])
+      }
+      while(queue.length) {
+        let [x, y] = queue.shift()
+        console.log(x, y)
+        // break
+        if (x === end[0] && y === end[1]) {
+          console.log('成功到达终点')
+          return true
+        }
+        insert(x - 1, y)
+        insert(x, y - 1)
+        insert(x + 1, y)
+        insert(x, y + 1)
+      }
+      return false
     }
   </script>
 </body>
