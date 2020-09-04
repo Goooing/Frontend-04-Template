@@ -15,7 +15,7 @@
       height: 5px;
       display: inline-block;
       border: 1px solid #fff;
-      background:#ccc;
+      background-color:#ccc;
     }
     .cell.black {
       width: 5px;
@@ -28,6 +28,18 @@
       height: 5px;
       border: 1px solid #fff;
       background: green;
+    }
+    .cell.yellow {
+      width: 5px;
+      height: 5px;
+      border: 1px solid #fff;
+      background: yellow;
+    }
+    .cell.purple {
+      width: 5px;
+      height: 5px;
+      border: 1px solid #fff;
+      background: purple;
     }
   </style>
 </head>
@@ -87,36 +99,58 @@
       }
     }
 
-    async function path(map, start, end) {
+    async function findPath(map, start, end) {
+      let table = Object.create(map)
+      console.dir(table)
       var queue = [start]
-      console.dir(queue)
-      async function insert(x, y) {
+      // console.dir(queue)
+      async function insert(x, y, pre) {
         if (x < 0 || x >= 100 || y < 0 || y >= 100) {
-          console.log(x)
+          // console.log(x)
           return
         }
-        if (map[y * 100 + x]) {
+        if (table[y * 100 + x]) {
           return
         }
-        await sleep(10)
-        container.children[y * 100 + x].classList.add('green')
-        map[y * 100 + x] = 2
+        // await sleep(1)
+        // / container.children[y * 100 + x].classList.add('green')
+        container.children[y * 100 + x].style.backgroundColor = 'lightgreen'
+        table[y * 100 + x] = pre
+        // console.dir(table)
         queue.push([x, y])
       }
       while(queue.length) {
         let [x, y] = queue.shift()
-        console.log(x, y)
+        // console.log(x, y)
         // break
         if (x === end[0] && y === end[1]) {
-          console.log('成功到达终点')
-          return true
+          let path = []
+          container.children[y * 100 + x].classList.add('yellow')
+          
+          while(x != start[0] || y != start[1]) {
+            
+            path.push(map[y * 100 + x])
+            // [x, y] = [y * 100 + x]  // 浏览器有差异？ 解构不出来
+            let tempX = x;
+            x = table[y * 100 + x][0]
+            y = table[y * 100 + tempX][1]
+            // console.log('x=' + x)
+            // console.log('y=' + y)
+            await sleep(100)
+            container.children[y * 100 + x].style.backgroundColor = 'purple'
+          }
+          return path
         }
-        await insert(x - 1, y)
-        await insert(x + 1, y)
-        await insert(x, y - 1)
-        await insert(x, y + 1)
+        await insert(x - 1, y, [x, y])
+        await insert(x, y - 1, [x, y])
+        await insert(x + 1, y, [x, y])
+        await insert(x, y + 1, [x, y])
+        await insert(x -1, y - 1, [x, y])
+        await insert(x + 1, y - 1, [x, y])
+        await insert(x - 1, y + 1, [x, y])
+        await insert(x + 1, y + 1, [x, y])
       }
-      return false
+      return null
     }
 
     function sleep(t) {
